@@ -1,5 +1,9 @@
+//decouple containers 
+var designerContainerSel = 'container', previewContainerSel = '#groupContainer', codeContainerSel = '#codeGenerator';
 
-var g = new Y.inputEx.Group({parentEl: 'container', fields: Y.inputEx.Group.groupOptions});
+//expose builder as a stepping stone to flexible integration
+var ib = Y.namespace('inputExBuilder');
+var g = ib.designer = new Y.inputEx.Group({parentEl: designerContainerSel, fields: Y.inputEx.Group.groupOptions});
 
 g.setValue({
 	"fields" : [
@@ -29,13 +33,13 @@ g.setValue({
 
 var rebuildPreview = function() { 
    var value = g.getValue();
-   var previewGroup = new Y.inputEx.Group(value);
+   var previewGroup = ib.previewGroup = new Y.inputEx.Group(value);
 
-   var groupContainer = Y.one('#groupContainer')._node;
+   var groupContainer = Y.one(previewContainerSel)._node;
    groupContainer.innerHTML = "";
    groupContainer.appendChild(previewGroup.getEl());
 
-   var codeContainer = Y.one('#codeGenerator')._node;
+   var codeContainer = Y.one(codeContainerSel)._node;
    codeContainer.innerHTML = value.toPrettyJSONString(true);
 };
 
